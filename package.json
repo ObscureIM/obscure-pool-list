@@ -1,0 +1,35 @@
+{
+  "name": "obscure-pool-list",
+  "version": "1.0.0",
+  "description": "A list of all obscure mining pools",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ObscureIM/obscure-pool-list.git"
+  },
+  "keywords": [
+    "Obscure",
+    "Mining",
+    "Pool",
+    "Mining",
+    "Privacy",
+    "Cryptonote"
+  ],
+  "author": "PausCrypto",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ObscureIM/obscure-pool-list/issues"
+  },
+  "homepage": "https://github.com/ObscureIM/obscure-pool-list#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "forever": "^0.15.3",
+    "node": "^11.7.0",
+    "request-promise-native": "^1.0.5",
+    "util": "^0.11.1",
+    "xmlhttprequest": "^1.8.0"
+  }
+}

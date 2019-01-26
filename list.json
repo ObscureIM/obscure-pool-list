@@ -3,6 +3,6 @@
     "name":"Official Obscure Pool",
     "url":"https://pool.obscure.im",
     "api":"https://pool.obscure.im/stats",
-    "type":"forknote",
+    "type":"forknote"
   }
 ]
