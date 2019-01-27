@@ -23,8 +23,8 @@ var server = app.listen(process.env.PORT || 8080, function () {
 
 const ObscurePoolRpc = require('./obscure-pool-rpc.js')
 const daemon = new ObscurePoolRpc({
-  host:"0.0.0.0",
-  port: 11898, // what port is the RPC server running on
+  host:"127.0.0.1",
+  port: 8080, // what port is the RPC server running on
   timeout: 2000, // request timeout
   ssl: false, // whether we need to connect using SSL/TLS
   enableCors: true
@@ -50,8 +50,8 @@ app.get('/poolList',function(req,res) {
   var xmlHttp = new XMLHttpRequest();
   xmlHttp.onreadystatechange = function() {
       if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-          answer = JSON.parse(xmlHttp.responseText)
-          res.send(answer);
+          res.send(JSON.parse(xmlHttp.responseText));
+
   }
   xmlHttp.open("GET", theUrl, true); // true for asynchronous
   xmlHttp.send(null);

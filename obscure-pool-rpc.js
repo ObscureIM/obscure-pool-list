@@ -15,16 +15,11 @@ var ObscurePoolRpc = function (opts) {
   this.enableCors = opts.enableCors || true
 }
 
-class testClass {
-  constructor(opts) {
-    this.opts = opts
-  }
-}
-
-
 ObscurePoolRpc.prototype.getStats = function(opts) {
   return new Promise((resolve,reject) => {
-    this._post('/list.json').then((result) => {
+    var url = this.host + ':8080' + '/poolList'
+    console.log(url)
+    this._post(url).then((result) => {
       return resolve(result)
     }).catch((error) => {
       return reject(error)
@@ -32,46 +27,20 @@ ObscurePoolRpc.prototype.getStats = function(opts) {
   })
 }
 
-ObscurePoolRpc.prototype._post = function (method, params) {
+ObscurePoolRpc.prototype._post = function (url, params) {
   return new Promise((resolve, reject) => {
-    if (method.length === 0) return reject(new Error('no method supplied'))
+    if (url.length === 0) return reject(new Error('no url supplied'))
     params = params || {}
-
-    var body = {
-      jsonrpc: '2.0',
-      method: method,
-      params: params
+    var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
+            return JSON.parse(xmlHttp.responseText);
     }
 
-    this._rawPost('json_rpc', body).then((result) => {
-      if (!result.error) {
-        return resolve(result.result)
-      } else {
-        return reject(result.error.message)
-      }
-    }).catch((err) => {
-      return reject(err)
-    })
+    xmlHttp.open("GET", url, true); // true for asynchronous
+    xmlHttp.send(null);
   })
 }
 
-ObscurePoolRpc.prototype._rawPost = function (endpoint, body) {
-  return new Promise((resolve, reject) => {
-    if (endpoint.length === 0) return reject(new Error('no endpoint supplied'))
-    if (body === undefined) return reject(new Error('no body supplied'))
-    var protocol = (this.ssl) ? 'https' : 'http'
-
-    request({
-      uri: util.format('%s://%s:%s/%s', protocol, this.host, this.port, endpoint),
-      method: 'POST',
-      body: body,
-      json: true,
-      timeout: this.timeout
-    }).then((result) => {
-      return resolve(result)
-    }).catch((err) => {
-      return reject(err)
-    })
-  })
-}
 module.exports = ObscurePoolRpc
