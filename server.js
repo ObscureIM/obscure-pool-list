@@ -1,5 +1,4 @@
 var express = require("express");
-
 var app = express();
 var allowCrossDomain = function(req, res, next) {
     res.header('Access-Control-Allow-Origin', '*');
@@ -20,48 +19,83 @@ var server = app.listen(process.env.PORT || 8080, function () {
     var port = server.address().port;
     console.log("App now running on port", port);
   })
+//mongoose
+var mongoose = require("mongoose")
+var mongoDB = 'mongodb://127.0.0.1/my_database';
+mongoose.connect(mongoDB)
+mongoose.Promise = global.Promise;
 
-const ObscurePoolRpc = require('./obscure-pool-rpc.js')
-const daemon = new ObscurePoolRpc({
-  host:"127.0.0.1",
-  port: 8080, // what port is the RPC server running on
-  timeout: 2000, // request timeout
-  ssl: false, // whether we need to connect using SSL/TLS
-  enableCors: true
-});
-//first lets call the side-server hosting the list.JSON
-//this script will be hosted on a side server
-function httpGetAsync(theUrl)
-{
-    var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.onreadystatechange = function() {
-        if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            console.log(xmlHttp.responseText)
-            return xmlHttp.responseText;
-    }
-    xmlHttp.open("GET", theUrl, true); // true for asynchronous
-    xmlHttp.send(null);
-}
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-app.get('/poolList',function(req,res) {
-  theUrl = "https://raw.githubusercontent.com/ObscureIM/obscure-pool-list/master/list.json#"
-  var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
-  var xmlHttp = new XMLHttpRequest();
-  xmlHttp.onreadystatechange = function() {
-      if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-          res.send(JSON.parse(xmlHttp.responseText));
+var schema = mongoose.schema;
 
-  }
-  xmlHttp.open("GET", theUrl, true); // true for asynchronous
-  xmlHttp.send(null);
-
+var poolSchema = new mongoose.Schema({
+  name: String,
+  miners: Number,
+  fee: Number,
+  minPayment: Number,
+  lastblock: Number,
+  totalblocks: Number
 })
+//define  the model
+var poolModel = mongoose.model('poolModel',poolSchema)
 
-app.get('/poolStats',function(req,res) {
-  daemon.getStats().then((result) => {
-    console.log(result)
+function updateDatabase() {
+  theUrl = "https://raw.githubusercontent.com/ObscureIM/obscure-pool-list/master/list.json#"
+  httpGetAsync(theUrl).then(function(fufilled) {
+    //fufilled is the list of all pool nodes
+    for(var i=0;i<fufilled.length;i++) {
+      //fufilled.length.api is the current api link in the loop
+      currentPool = fufilled[i]
+      httpGetAsync(currentPool.api).then((json) => {
+        var poolInfo = {
+          name: currentPool.name,
+          miners:json.pool.miners,
+          fee:json.config.fee,
+          minPayment:json.config.minPaymentThreshold,
+          lastblock:json.pool.stats.lastBlockFound,
+          totalblocks:json.pool.totalBlocks,
+        }
+        //instantiate the model
+        console.log(poolInfo)
+        var current_instance = new poolModel(poolInfo)
+
+        current_instance.save(function(err) {
+          if(err) return handleError(err);
+
+        })
+        console.log(current_instance.miners)
+      }).catch((error) => {
+        console.log(error)
+      })
+    }
   }).catch((error) => {
     console.log(error)
   })
-})
+}
+
+function httpGetAsync(theUrl) {
+  return new Promise(function(resolve,reject) {
+    var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+    var xmlHttp = new XMLHttpRequest();
+    var count = 0
+    xmlHttp.onreadystatechange = function() {
+        if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
+          count += 1;
+          if(xmlHttp.responseText != undefined) {
+            resolve(JSON.parse(xmlHttp.responseText))
+          }else if(count == 10) {
+            reject({
+              status: this.status,
+              statusText: "too many retries"
+            })
+          }
+        }
+    }
+    xmlHttp.open("GET", theUrl, true); // true for asynchronous
+    xmlHttp.send(null);
+  })
+
+}
+updateDatabase()

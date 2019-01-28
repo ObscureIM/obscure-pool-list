@@ -17,15 +17,16 @@ var ObscurePoolRpc = function (opts) {
 
 ObscurePoolRpc.prototype.getStats = function(opts) {
   return new Promise((resolve,reject) => {
-    var url = this.host + ':8080' + '/poolList'
-    console.log(url)
+    var url = 'http://' + this.host + ':8080' + '/poolList'
     this._post(url).then((result) => {
-      return resolve(result)
+      console.log(result)
     }).catch((error) => {
-      return reject(error)
+      console.log(error)
     })
   })
 }
+
+
 
 ObscurePoolRpc.prototype._post = function (url, params) {
   return new Promise((resolve, reject) => {
