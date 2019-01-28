@@ -65,7 +65,6 @@ function updateDatabase() {
           if(err) return handleError(err);
 
         })
-        console.log(current_instance.miners)
       }).catch((error) => {
         console.log(error)
       })
