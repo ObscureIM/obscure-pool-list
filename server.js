@@ -83,6 +83,7 @@ function httpGetAsync(theUrl) {
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200){
           count += 1;
           if(xmlHttp.responseText != undefined) {
+            console.log(xmlHttp.responseText)
             resolve(JSON.parse(xmlHttp.responseText))
           }else if(count == 10) {
             reject({
