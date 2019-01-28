@@ -4,17 +4,5 @@
     "url":"https://pool.obscure.im",
     "api":"https://pool.obscure.im/stats",
     "type":"forknote"
-  },
-  {
-    "name":"Official Obscure Pool2",
-    "url":"https://pool.obscure.im",
-    "api":"https://pool.obscure.im/stats",
-    "type":"forknote"
-  },
-  {
-    "name":"Official Obscure Pool3",
-    "url":"https://pool.obscure.im",
-    "api":"https://pool.obscure.im/stats",
-    "type":"forknote"
   }
 ]
