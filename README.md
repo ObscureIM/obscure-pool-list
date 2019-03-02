@@ -7,9 +7,9 @@ This JSON will be pinged by the official pool.osidian.im API. If you would like 
 
 [
   {
-    "name":"Official Obscure Pool", "Name of your pool"
-    "url":"https://pool.obscure.im", "website of your pool"
-    "api":"https://pool.obscure.im/stats", "Expose your /stats api here, my secondary server will ping it"
+    "name":"Official Obscure Pool", //Name of your pool
+    "url":"https://pool.obscure.im", //website of your pool
+    "api":"https://pool.obscure.im/stats", //Expose your /stats api here, my secondary server will ping it
     "type":"forknote",
   }
 ]
