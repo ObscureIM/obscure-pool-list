@@ -4,6 +4,12 @@
     "url":"https://pool.obscure.im",
     "api":"https://pool.obscure.im/stats",
     "type":"forknote"
+  },
+  {
+    "name":"XSC Lucky Pool",
+    "url":"https://xsc.luckypool.io/",
+    "api":"https://xsc.luckypool.io/api/stats",
+    "type":"forknote"
   }
 
 ]
