@@ -10,6 +10,12 @@
     "url":"https://xsc.luckypool.io/",
     "api":"https://xsc.luckypool.io/api/stats",
     "type":"forknote"
+  },
+  {
+    "name":"XSC CN Pool",
+    "url":"https://cnpool.cc/xsc/",
+    "api":"https://cnpool.cc/api/xsc/stats",
+    "type":"forknote"
   }
 
 ]
