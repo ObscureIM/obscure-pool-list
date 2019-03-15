@@ -16,6 +16,12 @@
     "url":"https://cnpool.cc/xsc/",
     "api":"https://cnpool.cc/api/xsc/stats",
     "type":"forknote"
+  },
+  {
+    "name":"Rplant",
+    "url":"https://xsc-pool.rplant.xyz/",
+    "api":"https://xsc-pool.rplant.xyz/api/stats",
+    "type":"forknote"
   }
 
 ]
